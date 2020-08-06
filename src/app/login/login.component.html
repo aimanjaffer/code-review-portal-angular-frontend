@@ -1,0 +1,37 @@
+<div class="container-fluid">
+<div class="row justify-content-center">
+    <h1 class=" mt-4">Code Review Portal</h1>
+</div>
+<hr class ="my-4">
+<div class="row justify-content-center">
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+    <div class ="form-row center">
+        <div class = "form-group-col-md-6">
+            <label class = "required" for="email">Email address</label>
+            <input [(ngModel)]="user.email"
+                type="email"
+                class="form-control"
+                #email ="ngModel"
+                [ngClass]="{'is-invalid':email.invalid && (email.dirty || email.touched)}"
+                required
+                pattern="^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,64})$"
+                name="email"
+                id="email">
+                <span class="invalid-feedback">
+                    <span *ngIf="email.errors?.pattern">
+                        Email address format is incorrect
+                    </span>
+                    <span *ngIf="email.errors?.required">
+                        Email address is required
+                    </span>
+                </span>
+        </div>
+    </div>
+    <div class = "form-row text-center">
+        <div class ="col p-md-4">
+            <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Login</button>
+        </div>
+    </div>
+</form>
+</div>
+</div>

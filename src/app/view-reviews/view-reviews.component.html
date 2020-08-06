@@ -1,0 +1,100 @@
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col align-self-end">
+    <p class="float-right" href="#" *ngIf="user.first_name && user.last_name">Welcome {{user.last_name}}, {{user.first_name}}</p>
+    </div>
+  </div>
+  <div class="row">
+        <div class="col-md-6 col-lg-6">
+    <p *ngIf="user.first_name && user.last_name">Reviews raised by you:</p>
+    <table *ngIf="reviewsReadableCreatedBy"class="table table-hover table-striped table-sm table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Review Name</th>
+          <th scope="col">Project Name</th>
+          <th scope="col">Lines of Code</th>
+          <th scope="col">Developer</th>
+          <th scope="col">Status</th>
+          <th scope="col">Reviewer</th>
+          <th scope="col">Date of closing</th>
+          <th scope="col">Date of submission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let r of reviewsReadableCreatedBy">
+          <th><a routerLink='/home/review/{{r.id}}'>{{r.id}}</a></th>
+          <td><a routerLink='/home/review/{{r.id}}'>{{r.review_name}}</a></td>
+          <td>{{r.project_name}}</td>
+          <td>{{r.lines_of_code}}</td>
+          <td>{{r.developer}}</td>
+          <td>{{r.status}}</td>
+          <td>{{r.reviewer}}</td>
+          <td>{{r.date_of_closing | date: 'dd/MM/yyyy'}}</td>
+          <td>{{r.date_of_submission | date: 'dd/MM/yyyy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <p *ngIf="user.first_name && user.last_name">Reviews assigned to you:</p>
+    <table *ngIf="reviewsReadableAssignedTo" class="table table-hover table-striped table-sm table-bordered">
+      <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Review Name</th>
+            <th scope="col">Project Name</th>
+            <th scope="col">Lines of Code</th>
+            <th scope="col">Developer</th>
+            <th scope="col">Status</th>
+            <th scope="col">Reviewer</th>
+            <th scope="col">Date of closing</th>
+            <th scope="col">Date of submission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let r of reviewsReadableAssignedTo">
+          <th><a routerLink='/home/assigned-review/{{r.id}}'>{{r.id}}</a></th>
+          <td><a routerLink='/home/assigned-review/{{r.id}}'>{{r.review_name}}</a></td>
+          <td>{{r.project_name}}</td>
+          <td>{{r.lines_of_code}}</td>
+          <td>{{r.developer}}</td>
+          <td>{{r.status}}</td>
+          <td>{{r.reviewer}}</td>
+          <td>{{r.date_of_closing | date: 'dd/MM/yyyy'}}</td>
+          <td>{{r.date_of_submission | date: 'dd/MM/yyyy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+<div *ngIf="unassignedReviews.length > 0" class="row">
+        <div class="col-md-6 col-lg-6">
+          <p>Unassigned Reviews:</p>
+          <table class="table table-hover table-striped table-sm table-bordered">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Review Name</th>
+                <th scope="col">Project Name</th>
+                <th scope="col">Lines of Code</th>
+                <th scope="col">Developer</th>
+                <th scope="col">Status</th>
+                <th scope="col">Date of submission</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor = "let r of unassignedReviews">
+                <th><a routerLink='/home/assign-review/{{r.id}}'>{{r.id}}</a></th>
+                <td><a routerLink='/home/assign-review/{{r.id}}'>{{r.review_name}}</a></td>
+                <td>{{r.project_name}}</td>
+                <td>{{r.lines_of_code}}</td>
+                <td>{{r.developer}}</td>
+                <td>{{r.status}}</td>
+                <td>{{r.date_of_submission | date: 'dd/MM/yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+</div>
+    </div>

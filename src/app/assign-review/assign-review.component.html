@@ -1,0 +1,73 @@
+<div class="container mt-3">
+<div class="row">
+<div class="col align-self-end">
+<p class="float-right" href="#" *ngIf="user.first_name && user.last_name">Welcome {{user.last_name}}, {{user.first_name}}</p>
+</div>
+</div>
+    <div class="row justfiy-content-center">
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+            <div class ="form-row">
+                <div class = "form-group-col-md-12 col-lg-6">
+                    <label class = "required" for="reviewName">Review Name</label>
+                    <input [(ngModel)]="review.review_name"
+                        type="text"
+                        class="form-control"
+                        #reviewName ="ngModel"
+                        name="reviewName"
+                        id="reviewName"
+                        readonly/>
+                    </div>
+              <!--  </div>
+                <div class ="form-row"> -->
+                    <div class = "form-group-col-md-12 col-lg-6">
+                        <label class = "required" for="projectName">Project Name</label>
+                        <input [(ngModel)]="review.project_name"
+                        type="text"
+                        class="form-control"
+                        #projectName ="ngModel"
+                        name="projectName"
+                        id="projectName"
+                        readonly/>
+                        </div>
+                <!--    </div>
+                    <div class ="form-row"> -->
+                      <div class = "form-group-col-md-12">
+                        <label class = "required" for="linesOfCode">Lines of Code</label>
+                        <input [(ngModel)]="review.lines_of_code"
+                        type="number"
+                        class="form-control"
+                        #linesOfCode ="ngModel"
+                        name="linesOfCode"
+                        id="linesOfCode"
+                        readonly/>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-row mt-4">
+                        <label for="reviewDetail">Description</label>
+                    </div>
+                    <div class="form-row">
+                        <textarea rows="5" cols="30" id="reviewDetail" readonly name="reviewDetail" [(ngModel)]="review.review_details" form="createForm"></textarea>
+                    </div>
+                    <hr>
+                    <div class ="form-row mt-4">
+                        <div class = "form-group-col-md-12">
+                        <button type="button" class="btn btn-primary" (click)="download()" id="downloadFile">Download File</button> 
+                </div>
+            </div>
+            <div class ="form-row">
+                      <div class = "form-group-col-md-12">
+                        <label for="reviewer">Select Reviewer:</label>
+                        <select [(ngModel)]="reviewerSelection" class="form-control" name="reviewer" id="reviewer">
+                            <option *ngFor="let option of reviewersList" [value]="option.id">{{option.first_name}} {{option.last_name}}</option>
+                        </select>
+                      </div>
+                    </div>
+            <div class = "form-row text-center">
+                <div class ="col p-md-4">
+                    <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Assign Reviewer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

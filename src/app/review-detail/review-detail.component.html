@@ -1,0 +1,172 @@
+<div class="container mt-3">
+    <div class="row">
+    <div class="col align-self-end">
+    <p class="float-right" href="#" *ngIf="user.first_name && user.last_name">Welcome {{user.last_name}}, {{user.first_name}}</p>
+    </div>
+    </div>
+            <form #form="ngForm">
+                <div class ="form-row">
+                    <div class = "form-group-col-md-12  col-lg-6">
+                        <label class = "required" for="reviewName">Review Name</label>
+                        <input [(ngModel)]="review.review_name"
+                            type="text"
+                            class="form-control"
+                            #reviewName ="ngModel"
+                            name="reviewName"
+                            id="reviewName"
+                            readonly/>
+                        </div>
+                        <div class = "form-group-col-md-12 col-lg-6">
+                            <label class = "required" for="projectName">Project Name</label>
+                            <input [(ngModel)]="review.project_name"
+                            type="text"
+                            class="form-control"
+                            #projectName ="ngModel"
+                            name="projectName"
+                            id="projectName"
+                            readonly/>
+                            </div>
+                          <div class = "form-group-col-md-12">
+                            <label class = "required" for="linesOfCode">Lines of Code</label>
+                            <input [(ngModel)]="review.lines_of_code"
+                            type="number"
+                            class="form-control"
+                            #linesOfCode ="ngModel"
+                            name="linesOfCode"
+                            id="linesOfCode"
+                            readonly/>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                            <label for="reviewDetail">Description</label>
+                        </div>
+                        <div class="form-row">
+                            <textarea rows="5" cols="30" id="reviewDetail" readonly name="reviewDetail" [(ngModel)]="review.review_details" form="createForm"></textarea>
+                        </div>
+                        <hr>
+                        <div class ="form-row">
+                            <div class = "form-group-col-md-12">
+                            <button type="button" class="btn btn-primary" (click)="download()" id="downloadFile">Download File</button> 
+                    </div>
+                </div>
+            </form>
+            <hr>
+<p><b>Review Comments:</b></p>
+<table *ngIf="reviewCommentsReadable" class="table table-hover table-striped table-sm table-bordered mt-4">
+    <thead class="thead-dark">
+      <tr>
+          <th scope="col">Comment ID</th>
+          <th scope="col">Review Comment</th>
+          <th scope="col">File Reference</th>
+          <th scope="col">Category</th>
+          <th scope="col">Sub-Category</th>
+          <th scope="col">Severity</th>
+          <th scope="col">Commented On</th>
+          <th scope="col">Disposition</th>
+          <th scope="col">Closure Status</th>
+          <th scope="col">Action Taken</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let c of reviewCommentsReadable">
+        <td>{{c.id}}</td>
+        <td>{{c.comment}}</td>
+        <td>{{c.file_name}}</td>
+        <td>{{c.category}}</td>
+        <td>{{c.sub_category}}</td>
+        <td>{{c.severity}}</td>
+        <td>{{c.comment_date | date: 'dd/MM/yyyy'}}</td>
+        <td>{{c.disposition}}</td>
+        <td>{{c.closure_status}}</td>
+        <td>{{c.action_taken}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <div *ngIf="review.status === 3"> <!-- TODO REMOVE THE HARDCODING OF STATUS VALUE-->
+  <p><b>Update Comment:</b></p>
+  <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+      <div class="form-row">
+          <div class="form-group-col-lg-3">
+              <label for="commentId">Comment ID</label>
+              <select [(ngModel)]="idOfCommentForUpdate"
+              required
+              (change)="commentIDChanged()"
+              #commentId = "ngModel" 
+              class="form-control"
+              [ngClass]="{'is-invalid':commentId.invalid && (commentId.dirty || commentId.touched)}"
+              name="commentId" 
+              id="commentId">
+          <option *ngFor="let commentID of commentIDList" [ngValue]="commentID">{{commentID}}</option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="commentId.errors?.required">
+                Comment ID is required
+            </span>
+        </span>
+          </div>
+          <div class="form-group-col-lg-3">
+              <label for="dispostion">Disposition</label>
+              <select [(ngModel)]="reviewCommentForUpdate.disposition"
+              required
+              #disposition = "ngModel" 
+              class="form-control"
+              [ngClass]="{'is-invalid':disposition.invalid && (disposition.dirty || disposition.touched)}"
+              name="dispostion" 
+              id="dispostion">
+          <option *ngFor="let disp of dispositionList" [ngValue]="disp.id">{{disp.disposition_name}}</option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="disposition.errors?.required">
+                Disposition is required
+            </span>
+        </span>
+          </div>
+          <div class="form-group-col-lg-3">
+              <label for="closureStatus">Closure Status</label>
+              <select [(ngModel)]="reviewCommentForUpdate.closure_status"
+              required
+              #closureStatus = "ngModel" 
+              class="form-control"
+              [ngClass]="{'is-invalid':closureStatus.invalid && (closureStatus.dirty || closureStatus.touched)}"
+              name="closureStatus" 
+              id="closureStatus">
+          <option *ngFor="let cs of closureStatusList" [ngValue]="cs.id">{{cs.status_name}}</option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="closureStatus.errors?.required">
+                Closure Status is required
+            </span>
+        </span>
+          </div>
+          <div class="form-group-col-lg-3">
+            <label for="comments">Action Taken</label>
+            <input [(ngModel)]="reviewCommentForUpdate.action_taken"
+                required
+                type="text"
+                class="form-control"
+                #actionTaken = "ngModel"
+                [ngClass]="{'is-invalid':actionTaken.invalid && (actionTaken.dirty || actionTaken.touched)}"
+                id="actionTaken"
+                name="actionTaken"/>
+                <span class="invalid-feedback">
+                  <span *ngIf="actionTaken.errors?.required">
+                      Action Taken is required
+                  </span>
+              </span>
+        </div>
+      </div>
+      <div class="form-row mt-3 justify-content-center">
+          <div class="form-group-col-lg-6">
+            <button type="submit" class="btn btn-primary" id="updateComment" [disabled]="!form.valid">Update Comment</button>  
+          </div>
+          <div class="form-group-col-lg-6">
+            <button type="button" class="btn btn-success" (click)="sendToReviewer()" id="sendToReviewer">Send To Reviewer</button>  
+          </div>
+      </div>
+  </form>
+</div>
+  <br>
+  <br>
+    </div>
+    

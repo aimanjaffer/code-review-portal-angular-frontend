@@ -1,0 +1,212 @@
+<div class="container mt-3">
+    <div class="row">
+        <div class="col align-self-end">
+            <p class="float-right" href="#" *ngIf="user.first_name && user.last_name">Welcome {{user.last_name}}, {{user.first_name}}</p>
+        </div>
+    </div>
+        <form #form="ngForm">
+            <div class ="form-row">
+                <div class = "form-group-col-md-6  col-lg-6">
+                    <label class = "required" for="reviewName">Review Name</label>
+                    <input [ngModel]="review.review_name"
+                    type="text"
+                    class="form-control"
+                    #reviewName ="ngModel"
+                    name="reviewName"
+                    id="reviewName"
+                    readonly/>
+                </div>
+                        <div class = "form-group-col-md-6 col-lg-6">
+                            <label class = "required" for="projectName">Project Name</label>
+                            <input [ngModel]="review.project_name"
+                            type="text"
+                            class="form-control"
+                            #projectName ="ngModel"
+                            name="projectName"
+                            id="projectName"
+                            readonly/>
+                        </div>
+                           </div>
+                           <hr>
+                            <div class ="form-row">
+                                <div class = "form-group-col-md-6 col-lg-6">
+                                    <label class = "required" for="linesOfCode">Lines of Code</label>
+                                    <input [ngModel]="review.lines_of_code"
+                                    type="number"
+                                    class="form-control"
+                                    #linesOfCode ="ngModel"
+                                    name="linesOfCode"
+                                    id="linesOfCode"
+                                    readonly/>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-row">
+                                <label for="reviewDetail">Description</label>
+                            </div>
+                            <div class="form-row">
+                                <textarea rows="5" cols="30" id="reviewDetail" readonly name="reviewDetail" [(ngModel)]="review.review_details" form="createForm"></textarea>
+                            </div>
+                            <hr>
+                            <div class="form-row">
+                                <div class="form-group">
+                                <label class = "required" for="submittedDate">Date of Submission</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group-col-md-6">
+                                <input [ngModel]="review.date_of_submission | date: 'dd/MM/yyyy'"
+                                type="text"
+                                class="form-control"
+                                #submittedDate ="ngModel"
+                                name="submittedDate"
+                                id="submittedDate"
+                                readonly/>
+                            </div>
+                                <div class = "form-group-col-md-6">
+                                    <button type="button" class="btn btn-primary" (click)="download()" id="downloadFile">Download File</button> 
+                                </div>
+                                <div class = "form-group-col-md-6">
+                                    <button type="button"
+                                     class="btn btn-success" (click)="closeReview()" id="closeReview">Close Review</button> 
+                                </div>
+                            </div>
+                        </form>
+                    
+<hr>
+<p><b>Review Comments:</b></p>
+<table *ngIf="reviewCommentsReadable" class="table table-hover table-striped table-sm table-bordered mt-4">
+    <thead class="thead-dark">
+      <tr>
+          <th scope="col">Comment ID</th>
+          <th scope="col">Review Comment</th>
+          <th scope="col">File Reference</th>
+          <th scope="col">Category</th>
+          <th scope="col">Sub-Category</th>
+          <th scope="col">Severity</th>
+          <th scope="col">Commented On</th>
+          <th scope="col">Disposition</th>
+          <th scope="col">Closure Status</th>
+          <th scope="col">Action Taken</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let c of reviewCommentsReadable">
+        <td>{{c.id}}</td>
+        <td>{{c.comment}}</td>
+        <td>{{c.file_name}}</td>
+        <td>{{c.category}}</td>
+        <td>{{c.sub_category}}</td>
+        <td>{{c.severity}}</td>
+        <td>{{c.comment_date | date: 'dd/MM/yyyy'}}</td>
+        <td>{{c.disposition}}</td>
+        <td>{{c.closure_status}}</td>
+        <td>{{c.action_taken}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <p><b>Add New Comment:</b></p>
+  <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+      <div class ="form-row mt-4">
+          <div class ="form-group-col-lg-6">
+              <label for="comment">Comment:</label>
+              <input [(ngModel)]="newComment.comment"
+                    type ="text" 
+                    required
+                    class="form-control"
+                    #comment = "ngModel"
+                    [ngClass]="{'is-invalid':comment.invalid && (comment.dirty || comment.touched)}"
+                    name="comment"
+                    id="comment"/>
+                    <span class="invalid-feedback">
+                        <span *ngIf="comment.errors?.required">
+                            Comment is required
+                        </span>
+                    </span>
+          </div>
+          <div class ="form-group-col-lg-6">
+            <label for="fileName">File Name:</label>
+            <input [(ngModel)]="newComment.file_name"
+                    type ="text"
+                    #fileName = "ngModel" 
+                    required
+                    class="form-control"
+                    [ngClass]="{'is-invalid':fileName.invalid && (fileName.dirty || fileName.touched)}" 
+                    name="fileName"
+                    id="fileName"/>
+                    <span class="invalid-feedback">
+                        <span *ngIf="fileName.errors?.required">
+                            File Name is required
+                        </span>
+                    </span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class ="form-group-col-lg-4">
+            <label for="category">Category:</label>
+            <select [(ngModel)]="newComment.category"
+                required
+                (change)="categoryChanged()"
+                #category = "ngModel" 
+                class="form-control"
+                [ngClass]="{'is-invalid':category.invalid && (category.dirty || category.touched)}"
+                name="category" 
+                id="category">
+            <option *ngFor="let c of categoryList" [value]="c.id">{{c.category_name}}</option>
+            </select>
+                <span class="invalid-feedback">
+                    <span *ngIf="category.errors?.required">
+                        Category is required
+                    </span>
+                </span>
+        </div>
+        <div class ="form-group-col-lg-4">
+            <label for="subCategory">Sub-category:</label>
+            <select [(ngModel)]="newComment.sub_category"
+                required
+                (change)="subcategoryChanged()"
+                #subCategory = "ngModel"
+                class="form-control"
+                [ngClass]="{'is-invalid':subCategory.invalid && (subCategory.dirty || subCategory.touched)}"
+                name="subCategory" 
+                id="subCategory">
+            <option *ngFor="let sc of subCategoryList" [ngValue]="sc.id">{{sc.sub_category_name}}</option>
+            </select>
+            <span class="invalid-feedback">
+                <span *ngIf="subCategory.errors?.required">
+                    Sub-category is required
+                </span>
+            </span>
+        </div>
+        <div class ="form-group-col-lg-4">
+            <label for="severity">Severity:</label>
+            <input [(ngModel)]="severityName"
+                    readonly
+                    type ="text"
+                    #severity = "ngModel" 
+                    class="form-control"
+                    name="severity"
+                    id="severity"/>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+          <div class="form-group-col-lg-6">
+            <button type="submit" 
+                    (click)="addComment()"
+                    class="btn btn-primary"  
+                    [disabled]="!form.valid">Add Comment</button>
+          </div>
+          <div class="form-group-col-lg-6">
+            <button type="button" 
+                    (click)="sendToDeveloper()"
+                    class="btn btn-success">
+                    Send Review To Developer</button>
+          </div>
+      </div>
+  </form>
+  <br>
+  <br>
+</div>
+                

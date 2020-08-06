@@ -1,0 +1,82 @@
+<div class="container mt-3">
+<div class="row">
+<div class="col align-self-end">
+<p class="float-right" href="#" *ngIf="user.first_name && user.last_name">Welcome {{user.last_name}}, {{user.first_name}}</p>
+</div>
+</div>
+    <div class="row justfiy-content-center">
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm" id="createForm">
+            <div class ="form-row mt-4">
+                <div class = "form-group-col-md-12">
+                    <label class = "required" for="reviewName">Review Name</label>
+                    <input [(ngModel)]="newReview.review_name"
+                        type="text"
+                        class="form-control"
+                        #reviewName ="ngModel"
+                        [ngClass]="{'is-invalid':reviewName.invalid && (reviewName.dirty || reviewName.touched)}"
+                        required
+                        name="reviewName"
+                        id="reviewName"/>
+                        <span class="invalid-feedback">
+                            <span *ngIf="reviewName.errors?.required">
+                                Review Name is required
+                            </span>
+                        </span>
+                    </div>
+               <!-- </div>
+                <div class ="form-row mt-4">-->
+                    <div class = "form-group-col-md-12">
+                        <label class = "required" for="projectName">Project Name</label>
+                        <input [(ngModel)]="newReview.project_name"
+                        type="text"
+                        class="form-control"
+                        #projectName ="ngModel"
+                        [ngClass]="{'is-invalid':projectName.invalid && (projectName.dirty || projectName.touched)}"
+                        required
+                        name="projectName"
+                        id="projectName"/>
+                        <span class="invalid-feedback">
+                            <span *ngIf="projectName.errors?.required">
+                                Project Name is required
+                            </span>
+                        </span>
+                        </div>
+                 <!--   </div>
+                    <div class ="form-row mt-4"> -->
+                      <div class = "form-group-col-md-12">
+                        <label class = "required" for="linesOfCode">Lines of Code</label>
+                        <input [(ngModel)]="newReview.lines_of_code"
+                        type="number"
+                        class="form-control"
+                        #linesOfCode ="ngModel"
+                        name="linesOfCode"
+                        id="linesOfCode"/>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-row mt-4">
+                        <label for="reviewDetail">Description</label>
+                    </div>
+                    <div class="form-row">
+                        <textarea rows="5" cols="30" id="reviewDetail" name="reviewDetail" [(ngModel)]="newReview.review_details" form="createForm">Enter Review Description here...</textarea>
+                    </div>
+                    <hr>
+                    <div class ="form-row mt-4">
+                        <div class = "form-group-col-md-12">
+                        <label for="uploadFiles">Upload File (Bundle all required files in a single .zip)</label>
+                        <input (change)="fileChange($event)"
+                        type="file"
+                        class="form-control-file"
+                        required
+                        name="uploadFiles"
+                        id="uploadFiles"/>
+                </div>
+            </div>
+            <div class = "form-row text-center">
+                <div class ="col p-md-4">
+                    <button type="submit" class="btn btn-primary" (click)="createReview()" [disabled]="!form.valid">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
